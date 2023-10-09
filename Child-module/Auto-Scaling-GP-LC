@@ -1,0 +1,20 @@
+resource "aws_autoscaling_group" "Final-proj-ASG" {
+  name                      = "Autoscaling-group"
+  max_size                  = 5
+  min_size                  = 1
+  desired_capacity          = 4
+  health_check_grace_period = 300
+  health_check_type         = "ELB"
+  force_delete              = true
+  launch_configuration      = aws_launch_configuration.Bismark_launch_conf.name
+  vpc_zone_identifier       = [aws_subnet.Final-proj-Pub-Sub.id, aws_subnet.Final-proj-Pub-Sub-2.id]
+}
+
+resource "aws_launch_configuration" "Bismark_launch_conf" {
+  name                        = "ASG_launch"
+  image_id                    = "ami-078a289ddf4b09ae0"
+  instance_type               = var.instance-1
+  key_name                    = "yyy"
+  security_groups             = [aws_security_group.Final-proj-SG.id]
+  associate_public_ip_address = true
+}
